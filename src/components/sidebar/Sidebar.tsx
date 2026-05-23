@@ -33,7 +33,6 @@ function Sidebar () {
     children: [
       { key: '/mainlayout/warehouse/store-house', label: 'Omborxona' },
       { key: '/mainlayout/warehouse/product', label: 'Mahsulotlar' },
-      { key: '/mainlayout/warehouse/qaytarish', label: 'Mijozdan(Qaytarish)' },
     ],
   },
   {
@@ -59,10 +58,11 @@ function Sidebar () {
     label: 'Sotuv',
     icon: <ShoppingCartOutlined />,
     children: [
-      { key: '/mainlayout/sale/expense-product', label: 'Sotuv foydasi' },
-      { key: '17', label: 'Qayta baholash' },
-      { key: '18', label: 'Qo\'shimcha narx' },
-      { key: '19', label: 'Narxlar ro\'yhati' },
+      { key: '/mainlayout/sale/expense-product', label: 'Mijozga sotuv' },
+      { key: '17', label: 'Sotuv foydasi' },
+      { key: '18', label: 'Qayta baholash' },
+      { key: '19', label: 'Qo\'shimcha narx' },
+      { key: '20', label: 'Narxlar ro\'yhati' },
     ],
   },
 ];

@@ -7,7 +7,7 @@ function StoreHouse() {
   
     return (
         <div >
-            <div className='flex gap-5 bg-white p-4 rounded-xl border border-gray-100'>
+            <div className='flex gap-5 bg-white p-4 rounded-xl border border-gray-100 mb-2'>
                 <SupplierFilter />
                 <ChoosedDate />
             </div>

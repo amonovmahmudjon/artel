@@ -9,6 +9,8 @@ function ChoosedDate() {
       ? searchParams.set("choosedDate", dayjs(value).format("YYYY-MM-DD"))
       : searchParams.delete("choosedDate");
     setSearchParams(searchParams);
+    console.log(searchParams);
+    
   };
   return (
     <div>

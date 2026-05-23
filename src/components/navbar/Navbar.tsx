@@ -14,6 +14,7 @@ function Navbar() {
     const onSelectChange = (value: number) => {
     dispatch(setSelectedOrgId(value)); // Redux-ni yangilash
   };
+  const isOrganizationDisabled = useAppSelector((state) => state.disableOrganization.isDisabled)
 
 
     const { data: organizations, isLoading } = useQuery({
@@ -60,7 +61,8 @@ function Navbar() {
                         placeholder="Search to Select"
                         value={selectedOrgId || undefined}
                         onChange={onSelectChange}
-                        options={organizations || []} />
+                        options={organizations || []} 
+                        disabled={isOrganizationDisabled}/>
                     <BellOutlined />
                 </div>
 

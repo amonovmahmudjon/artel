@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit"
 import  authReducer  from "@/store/features/authSlice";
 import organizationReducer from "@/store/features/organizationSlice"
+import  disableOrganizationReducer  from "./features/disabledOrganizationSlice";
 
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         organization: organizationReducer,
+        disableOrganization: disableOrganizationReducer
 
     }
 })
@@ -16,6 +18,8 @@ export const makeStore = () => {
         reducer: {
             auth: authReducer,
             organization: organizationReducer,
+            disableOrganization: disableOrganizationReducer
+            
             
 
         }

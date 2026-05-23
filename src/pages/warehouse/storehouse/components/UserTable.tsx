@@ -69,7 +69,8 @@ function UserTable() {
       dataSource={UserTableData}
       pagination={false}
       rowKey="id"
-      scroll={{ y: "calc(100vh - 280px)" }}
+      scroll={{ y: "calc(100vh - 250px)" ,x: "max-content" }}
+      size="middle"
       summary={(pageData) => {
         let totalCount = 0;
         const totalPricesCurrency: Record<string, number> = {};

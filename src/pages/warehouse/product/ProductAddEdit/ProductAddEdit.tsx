@@ -200,31 +200,3 @@ function ProductAddEdit() {
   );
 }
 export default ProductAddEdit;
-
-// onSubmit: async (values) => {
-//   try {
-//     const formData = new FormData();
-//     formData.append("name", values.name);
-//     formData.append("description", values.description || "");
-
-//     // Agar rasm tanlangan bo'lsa
-//     if (values.photoUrl instanceof File) {
-//       formData.append("photo", values.photoUrl);
-//     }
-
-//     // Ichki mahsulotlarni string holatida yuborish (ko'p hollarda backend shunday kutadi)
-//     formData.append("products", JSON.stringify(values.products));
-
-//     if (isEdit) {
-//       await api.put("/producttype/update", formData);
-//       message.success("Mahsulot muvaffaqiyatli yangilandi");
-//     } else {
-//       await api.post("/producttype/create", formData);
-//       message.success("Yangi mahsulot yaratildi");
-//     }
-//     navigate("/warehouse/product"); // Saqlab bo'lgach ro'yxatga qaytish[cite: 1]
-//   } catch (error) {
-//     message.error("Xatolik yuz berdi!");
-//     console.error(error);
-//   }
-// },

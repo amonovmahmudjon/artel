@@ -3,9 +3,11 @@ import { Button } from "antd";
 import { ReloadOutlined, PlusOutlined } from "@ant-design/icons";
 import { Flex } from "antd";
 import { useNavigate } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 function Filter() {
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
   return (
     <div>
       <div
@@ -22,7 +24,7 @@ function Filter() {
             Filter
           </Button>
           <Flex  justify="space-between" align="center" gap={15} >
-            <Button icon={<ReloadOutlined />} />
+            <Button icon={<ReloadOutlined />} onClick={() =>  queryClient.refetchQueries({queryKey:["ProductTableData"]},{})}  />
             <Button type="primary" icon={<PlusOutlined />}  onClick={()=> navigate("add")}/>
           </Flex>
         </Flex>

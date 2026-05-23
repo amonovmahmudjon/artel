@@ -4,7 +4,7 @@ import ProductTable from "@/pages/warehouse/product/components/ProductTable";
 function Product() {
     return (
         <div>
-        <div className=' bg-white rounded-2xl mb-4'>
+        <div className=' bg-white rounded-2xl mb-3'>
                 <Filter />
             </div>
             <ProductTable />
