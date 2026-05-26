@@ -1,10 +1,16 @@
 import Sidebar from "@/components/sidebar/Sidebar"
 import Navbar from "@/components/navbar/Navbar"
 import { Outlet } from "react-router"
+import { useAppDispatch } from "@/store/hooks"
+import { useEffect } from "react"
 
 
 
 function MainLayout() {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    
+  })
   return (
      <div className="flex h-screen overflow-hidden bg-gray-200">
       <Sidebar />

@@ -44,7 +44,7 @@ function SaleTable({ dataSource, onDelete }: SaleTableProps) {
   ];
 
   return (
-    <div className="text-ms text-color-base">
+    <div className="text-ms text-color-base bg-white">
       <Table<SaleTableData>
         columns={columns}
         dataSource={dataSource}
@@ -52,6 +52,29 @@ function SaleTable({ dataSource, onDelete }: SaleTableProps) {
         pagination={false}
         rowKey="id"
         scroll={{ y: "calc(100vh - 360px)", x: "max-content" }}
+        summary={(pageData) => {
+          const totalSum = pageData.reduce((sum, product) => {
+            return sum + (Number(product.salePrice) || 0);
+          }, 0);
+
+          return (
+            <Table.Summary fixed="bottom">
+              <Table.Summary.Row
+                style={{ backgroundColor: "#fafafa", fontWeight: "bold"}}
+              >
+                <Table.Summary.Cell index={0} colSpan={3}>
+                  Jami:
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={3} align="center">
+                  {totalSum.toLocaleString()} UZS
+                </Table.Summary.Cell>
+             <Table.Summary.Cell index={4}>
+                </Table.Summary.Cell>
+              </Table.Summary.Row>
+            </Table.Summary>
+            
+          );
+        }}
       />
     </div>
   );

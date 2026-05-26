@@ -5,7 +5,12 @@ import api from "@/api/axiosInstance";
 import { useAppSelector } from "@/store/hooks";
 import { Link, useSearchParams } from "react-router";
 import { type SaleClientTableType } from "@/interface/interface";
-import { DateFormat, notifyError, notifySuccess, numberSpacing } from "@/utils/utils";
+import {
+  DateFormat,
+  notifyError,
+  notifySuccess,
+  numberSpacing,
+} from "@/utils/utils";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Modal } from "antd";
 
@@ -130,7 +135,11 @@ function SaleClientTable() {
       },
     },
   ];
-  const { data: ProductTableData,refetch,isLoading } = useQuery({
+  const {
+    data: ProductTableData,
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["ProductTableData", organizationId, searchParams.toString()],
     queryFn: async () => {
       try {
@@ -147,37 +156,36 @@ function SaleClientTable() {
       }
     },
   });
-  const handleDelete = async (id:number) => {
-    try{
-      await api.delete(`sale/delete/${id}`)
-      refetch()
-      notifySuccess("Mufaqqiyatli o'chirildi")
-      console.log("api",ProductTableData);
-      
-    }catch (error){
-      console.error(error)
-      notifyError(`Xatolik yuz berdi ${ error}`)
+  const handleDelete = async (id: number) => {
+    try {
+      await api.delete(`sale/delete/${id}`);
+      refetch();
+      notifySuccess("Mufaqqiyatli o'chirildi");
+      console.log("api", ProductTableData);
+    } catch (error) {
+      console.error(error);
+      notifyError(`Xatolik yuz berdi ${error}`);
     }
-  }
+  };
 
   return (
     <Spin spinning={isLoading} size="large">
-    <div className="bg-white">
-      {contextHolder}
-      <Table<SaleClientTableType>
-        columns={columns}
-        dataSource={ProductTableData}
-        scroll={{ y: "calc(100vh - 300px)", x: "max-content" }}
-        pagination={{
-          defaultPageSize: 50,
-          pageSizeOptions: ["10", "20", "50", "100"],
-          showSizeChanger: true,
-          showTotal: (total) => ` Jami: ${total} ta `,
-        }}
-        rowKey="id"
-        size="middle"
-      />
-    </div>
+      <div className="bg-white">
+        {contextHolder}
+        <Table<SaleClientTableType>
+          columns={columns}
+          dataSource={ProductTableData}
+          scroll={{ y: "calc(100vh - 300px)", x: "max-content" }}
+          pagination={{
+            defaultPageSize: 50,
+            pageSizeOptions: ["10", "20", "50", "100"],
+            showSizeChanger: true,
+            showTotal: (total) => ` Jami: ${total} ta `,
+          }}
+          rowKey="id"
+          size="middle"
+        />
+      </div>
     </Spin>
   );
 }

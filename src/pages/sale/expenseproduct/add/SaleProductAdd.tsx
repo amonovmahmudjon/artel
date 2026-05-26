@@ -47,7 +47,6 @@ function SaleProductAdd() {
     };
   }, []);
   function handleAddProduct(prev: SaleTableData) {
-    console.log(prev);
 
     const findProduct = tableData.find((product) => product.id === prev.id);
     if (!findProduct) {
@@ -152,7 +151,7 @@ function SaleProductAdd() {
           </div>
         </div>
       </div>
-      <SalePayment />
+      <SalePayment tableData={tableData}/>
     </div>
   );
 }

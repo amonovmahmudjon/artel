@@ -1,21 +1,18 @@
 import { Modal, Input, Select, Button } from "antd";
-import { useState } from "react";
+import React, { useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { BsBackspaceFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/api/axiosInstance";
 import { useAppSelector } from "@/store/hooks";
 import type { FormikProps } from "formik";
-import { notifyError, notifySuccess, notifyWarning } from "@/utils/utils";
+import { notifySuccess, notifyWarning } from "@/utils/utils";
 
 interface CalculateModalProps {
   open: boolean;
   paymentSystemTypeId: 1 | 2 | 3 | null;
   onCancel: () => void;
-  onConfirm: (amount: number) => void;
   formik: FormikProps<any>;
-  totalAmount: number;
-  disabled: boolean;
 }
 interface SelectItem {
   id: number;
@@ -27,24 +24,9 @@ function CalculateModal({
   paymentSystemTypeId,
   onCancel,
   formik,
-  totalAmount,
-  disabled,
 }: CalculateModalProps) {
   const [inputValue, setInputValue] = useState<string>("");
-  const handleKeyClick = (key: string) => {
-    if (key === "C") {
-      setInputValue("");
-    } else if (key === "delete") {
-      setInputValue((value = "") =>
-        value.length > 1 ? value.slice(0, value.length - 1) : "",
-      );
-    } else if (key === "000" || key === "00") {
-      setInputValue((value = "") => (value === "0" ? value : value + key));
-    } else {
-      setInputValue((value = "") => (value === "0" ? value : value + key));
-    }
-  };
-  const organizationId = useAppSelector(
+    const organizationId = useAppSelector(
     (item) => item.organization.selectedOrgId,
   );
 
@@ -72,35 +54,91 @@ function CalculateModal({
     enabled: Boolean(organizationId),
   });
 
+ 
+  const currentPayment = (formik.values.payments || []).find(
+    (p: any) => p.paymentSystemTypeId === paymentSystemTypeId
+  ) || {};
+
+  const selectedBankId = paymentSystemTypeId !== 2 ? currentPayment.bankId ?? null : null;
+  const selectedCurrencyId = paymentSystemTypeId === 2 ? currentPayment.currencyId ?? 1 : 1;
+
+  const handleBankChange = (val: number) => {
+    const payments = [...(formik.values.payments || [])];
+    const idx = payments.findIndex((p: any) => p.paymentSystemTypeId === paymentSystemTypeId);
+    if (idx !== -1) {
+      payments[idx] = { ...payments[idx], bankId: val };
+    } else {
+      payments.push({ paymentSystemTypeId, bankId: val });
+    }
+    formik.setFieldValue("payments", payments);
+  };
+
+  const handleCurrencyChange = (val: number) => {
+    const payments = [...(formik.values.payments || [])];
+    const idx = payments.findIndex((p: any) => p.paymentSystemTypeId === paymentSystemTypeId);
+    if (idx !== -1) {
+      payments[idx] = { ...payments[idx], currencyId: val };
+    } else {
+      payments.push({ paymentSystemTypeId, currencyId: val });
+    }
+    formik.setFieldValue("payments", payments);
+  };
+
+  React.useEffect(() => {
+    setInputValue("");
+  }, [open, paymentSystemTypeId]);
+
+  const handleKeyClick = (key: string) => {
+    if (key === "C") {
+      setInputValue("");
+    } else if (key === "delete") {
+      setInputValue((value = "") =>
+        value.length > 1 ? value.slice(0, value.length - 1) : "",
+      );
+    } else if (key === "000" || key === "00") {
+      setInputValue((value = "") => (value === "0" ? value : value + key));
+    } else {
+      setInputValue((value = "") => (value === "0" ? value : value + key));
+    }
+  };
+
   const handleFinish = () => {
     const amount = Number(String(inputValue).replace(/\s/g, ""));
     if (isNaN(amount) || amount <= 0) {
-      notifyWarning("Iltimos, to'g'ri summani kiriting.");
+      notifyWarning("Iltimos, to'g'ri summani kiriting!");
       return;
     }
+    if (paymentSystemTypeId !== 2 && !selectedBankId) {
+      notifyWarning("Iltimos bankni tanlang!");   
+      return;
+    }
+
     const paymentData = {
       paymentSystemTypeId: paymentSystemTypeId,
       amount: amount,
-      currencyId: paymentSystemTypeId !== 2 ? formik.values.currencyId : 1,
-      bankId: paymentSystemTypeId === 2 ? null : formik.values.bankId,
+      currencyId: paymentSystemTypeId === 2 ? selectedCurrencyId : 1,
+      bankId: paymentSystemTypeId === 2 ? null : selectedBankId,
+      name:
+        paymentSystemTypeId === 1
+          ? "Ko'chirma"
+          : paymentSystemTypeId === 2
+            ? "Naqd"
+            : "Terminal",
     };
 
-    const currentPayments = [...(formik.values.payments || [])];
-    const index = currentPayments.findIndex(
-      (payment: any) => payment.paymentSystemTypeId === paymentSystemTypeId,
-    );
-    if (index !== -1) {
-      currentPayments[index] = paymentData;
-      formik.setFieldValue("payments", currentPayments);
+    const payments = [...(formik.values.payments || [])];
+    const idx = payments.findIndex((p: any) => p.paymentSystemTypeId === paymentSystemTypeId);
+    if (idx !== -1) {
+      payments[idx] = { ...payments[idx], ...paymentData };
     } else {
-      currentPayments.push(paymentData);
-      formik.setFieldValue("payments", currentPayments);
+      payments.push(paymentData);
     }
-    formik.setFieldValue("payments", currentPayments);
+    formik.setFieldValue("payments", payments);
     setInputValue("");
     onCancel();
     notifySuccess("To'lov qo'shildi");
-    console.log(formik.values.payments);
+    console.log(formik.values);
+    
   };
 
   const getTitle = () => {
@@ -161,9 +199,9 @@ function CalculateModal({
               label: item.name,
               value: item.id,
             }))}
-            disabled={disabled}
-            onSelect={(val) => formik.setFieldValue("currencyId", val)}
-            value={formik.values.payments?.currencyId}
+            disabled={paymentSystemTypeId !== 2}
+            onChange={handleCurrencyChange}
+            value={selectedCurrencyId}
           />
         </div>
         {paymentSystemTypeId !== 2 && (
@@ -176,8 +214,8 @@ function CalculateModal({
             }))}
             style={{ width: "100%", marginTop: "10px" }}
             size="large"
-            onSelect={(val) => formik.setFieldValue("bankId", val)}
-            value={formik.values.payments?.bankId}
+            onChange={handleBankChange}
+            value={selectedBankId}
           />
         )}
 

@@ -27,6 +27,8 @@ function FinishModalSale({ onCancel, open, formik }: FinishModalProps) {
       return data;
     },
   });
+  console.log(formik.values);
+  
   return (
     <div>
       <Modal
@@ -36,7 +38,7 @@ function FinishModalSale({ onCancel, open, formik }: FinishModalProps) {
         footer={false}
         width={450}
       >
-        <Form layout="vertical">
+        <Form layout="vertical" onFinish={formik.handleSubmit}>
           <Form.Item label="Menejer">
             <Select
               placeholder="Menejer"
@@ -48,17 +50,19 @@ function FinishModalSale({ onCancel, open, formik }: FinishModalProps) {
               )}
               className="w-full text-lg"
               loading={isLoading}
+              value={formik.values.employeeId}
+              onChange={(value)=> formik.setFieldValue("employeeId",value)}
             />
           </Form.Item>
           <InputText
             label="Kurs"
-            fieldName="fullName"
+            fieldName="exchangeRate"
             placeholder="Kurs"
             formik={formik}
           />
           <InputText
             label="Ma'lumot"
-            fieldName="fullName"
+            fieldName="description"
             placeholder="Ma'lumot"
             formik={formik}
           />
@@ -69,7 +73,8 @@ function FinishModalSale({ onCancel, open, formik }: FinishModalProps) {
             variant="solid"
             type="primary"
             htmlType="submit"
-          >
+            
+                     >
             Yakunlash
           </Button>
         </Form>

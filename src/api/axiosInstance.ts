@@ -1,3 +1,4 @@
+import { notifyError } from "@/utils/utils";
 import axios from "axios"
 
 const api = axios.create({
@@ -11,7 +12,6 @@ const api = axios.create({
           const parsed = JSON.parse(userData);
           // API response strukturasi uchun turli variantlarni tekshiramiz
           const token = parsed.token || parsed.accessToken || parsed.access_token;
-          console.log("Token olinmoqda:", token ? "✓ Topildi" : "✗ Topilmadi", parsed);
           if (token) {
             config.headers.Authorization = `Bearer ${token}`;
           }
@@ -35,6 +35,7 @@ const api = axios.create({
       }
 
       if (error.code === "ERR_NETWORK") {
+        notifyError("Server bilan aloqa uzildi")
         console.error("Server bilan aloqa uzildi!");
       }
 

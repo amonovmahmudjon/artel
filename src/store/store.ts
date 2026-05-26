@@ -1,31 +1,28 @@
-import { configureStore } from "@reduxjs/toolkit"
-import  authReducer  from "@/store/features/authSlice";
-import organizationReducer from "@/store/features/organizationSlice"
-import  disableOrganizationReducer  from "./features/disabledOrganizationSlice";
-
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "@/store/features/authSlice";
+import organizationReducer from "@/store/features/organizationSlice";
+import disableOrganizationReducer from "./features/disabledOrganizationSlice";
+import exchangeRateReducer from "./features/exchangeRateSlice";
 
 export const store = configureStore({
-    reducer: {
-        auth: authReducer,
-        organization: organizationReducer,
-        disableOrganization: disableOrganizationReducer
-
-    }
-})
+  reducer: {
+    auth: authReducer,
+    organization: organizationReducer,
+    disableOrganization: disableOrganizationReducer,
+    exchangeRate: exchangeRateReducer,
+  },
+});
 
 export const makeStore = () => {
-    return configureStore({
-        reducer: {
-            auth: authReducer,
-            organization: organizationReducer,
-            disableOrganization: disableOrganizationReducer
-            
-            
-
-        }
-    })
-}
-
+  return configureStore({
+    reducer: {
+      auth: authReducer,
+      organization: organizationReducer,
+      disableOrganization: disableOrganizationReducer,
+      exchangeRate: exchangeRateReducer,
+    },
+  });
+};
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
